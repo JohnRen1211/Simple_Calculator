@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        /* CSS for calculator */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        
+        .container {
+            border-radius: 8px;
+            padding: 2rem 1.5rem;
+            background: #f2f2f2;
+        }
+        
+        .display {
+            height: 80px;
+            width: 100%;
+            padding-inline: 1rem;
+            margin-bottom: 1.5rem;
+            font-family: Arial, sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: right;
+            color: #333;
+            background: #fff;
+            border: 6px solid #333;
+            border-radius: 8px;
+            outline: none;
+            pointer-events: none;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        .buttons button {
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            font-weight: 600;
+            transition: transform 0.1s;
+        }
+        
+        .buttons button:active {
+            transform: scale(0.95);
+        }
+        
+        .operation {
+            background: #666;
+        }
+        .button.equal {
+            grid-column: span 2; /* Expand the button to span 2 columns */
+            background-color: coral;
+          }
+          
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p><strong>Kasyo Calculator</strong></p>
+        <input type="text" class="display" readonly>
+        <div class="buttons">
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button onclick="appendValue('+')">+</button>
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button onclick="appendValue('-')">-</button>
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button onclick="appendValue('*')">&times;</button>
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button onclick="convertToBinary()">Binary</button>
+            <button onclick="appendValue('/')">&divide;</button>
+            <button onclick="addToMemory()">M+</button>
+            <button onclick="subtractFromMemory()">M-</button>
+            <button onclick="clearDisplay()">AC</button>
+            <button onclick="deleteLastCharacter()">&larr;</button>
+            <button onclick="recallMemory()">MR</button>
+            <button id="clearMemoryButton" onclick="clearMemory()">MC</button>
+            <button class="button equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for calculator
+        const display = document.querySelector(".display");
+        let periodAdded = false;
+
+        function appendValue(value) {
+            if (value === '.') {
+                if (display.value.endsWith('.') || isNaN(display.value.slice(-1))) {
+                    return; // Ignore if period is already at the end or if onethe last character is not a number
+                }
+            }
+            display.value += value;
+        }
+        
+        
+
+        function calculate() {
+            try {
+                const result = eval(display.value);
+                display.value = result;
+            } catch (error) {
+                display.value = "Error";
+            }
+        }
+
+        function clearDisplay() {
+            display.value = "";
+            periodAdded = false;
+        }
+
+        function convertToBinary() {
+            const decimalValue = parseFloat(display.value);
+            if (!isNaN(decimalValue)) {
+                const binaryValue = decimalValue.toString(2);
+                display.value = binaryValue.replace(/\.0+$/, ""); // Remove trailing 
+            }
+        }        
+
+        function deleteLastCharacter() {
+            display.value = display.value.slice(0, -1);
+          }
+
+          let memory = 0;
+
+          function addToMemory() {
+            const currentValue = parseFloat(display.value);
+            if (!isNaN(currentValue)) {
+              memory += currentValue;
+            }
+          }
+          
+          function subtractFromMemory() {
+            const currentValue = parseFloat(display.value);
+            if (!isNaN(currentValue)) {
+              memory -= currentValue;
+            }
+          }
+          
+          function recallMemory() {
+            display.value = memory.toString();
+          }
+        
+          function clearMemory() {
+            memory = 0;
+          }
+          
+           
+    </script>
+</body>
+</html>
